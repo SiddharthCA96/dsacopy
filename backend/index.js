@@ -13,6 +13,10 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
+// Test Route
+app.get("/", (req, res) => {
+  res.json("Testing");
+});
 app.use("/api/auth", allRoutes);
 
 // Start the server
