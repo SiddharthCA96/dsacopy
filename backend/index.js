@@ -14,13 +14,13 @@ app.use(express.json());
 
 // Routes
 // Test Route
-app.get("/test", (req, res) => {
-  res.json({
-    message: "Deployment is successful!",
-    status: "OK",
-    timestamp: new Date().toISOString(),
-  });
-});
+// app.get("/test", (req, res) => {
+//   res.json({
+//     message: "Deployment is successful!",
+//     status: "OK",
+//     timestamp: new Date().toISOString(),
+//   });
+// });
 
 app.use("/api/auth", allRoutes);
 

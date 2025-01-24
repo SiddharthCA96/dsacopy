@@ -4,6 +4,13 @@ import {User} from "../db/index.js"
 import jwt from "jsonwebtoken"
 import {JWT_SECRET} from "../config.js"
 
+export const tt=async(req,res)=>{
+  res.json({
+    message: "Deployment is successful!",
+    status: "OK",
+    timestamp: new Date().toISOString(),
+  });
+}
 
 //get the body
 const signupBody = zod.object({
