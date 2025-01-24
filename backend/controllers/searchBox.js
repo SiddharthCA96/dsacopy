@@ -10,12 +10,12 @@ dotenv.config();
 const Mongo = process.env.MONGO_URI;
 
 
-mongoose
-  .connect(
-    Mongo
-  )
-  .then(() => console.log("DB connected"))
-  .catch((err) => console.error("DB connection error:", err));
+mongoose.connect(Mongo, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(() => console.log('Connected to MongoDB Atlas'))
+  .catch((err) => console.error('Connection error:', err));
 
 //variables
 let all_keyword = [];
