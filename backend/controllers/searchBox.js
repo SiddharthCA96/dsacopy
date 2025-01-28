@@ -92,7 +92,7 @@ export const topResults = async (req, res) => {
 
   if (!isDataLoaded) {
     return res.status(500).json({
-      message: "Data is still being loaded. Please try again later.",
+      message: "Data is not loaded.",
     });
   }
 
