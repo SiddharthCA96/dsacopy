@@ -20,10 +20,10 @@ export const Signin = () => {
       <div className="rounded-lg bg-white w-80 text-center p-2 h-max px-4">
         <Heading label={"Sign in"} />
         <SubHeading label={"Enter your credentials to access your account"} />
-        <InputBox placeholder="sid@gmail.com" label={"Email"} onChange={(e)=>{
+        <InputBox placeholder="sid@gmail.com" label={"Email"}  onChange={(e)=>{
             setUsername(e.target.value);
         }} />
-        <InputBox placeholder="123456" label={"Password"}    onChange={(e) => {
+        <InputBox type="password" placeholder="123456" label={"Password"}   onChange={(e) => {
               setPassword(e.target.value);
             }} />
         <div className="pt-4">
