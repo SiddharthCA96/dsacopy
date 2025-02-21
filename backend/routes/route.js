@@ -5,7 +5,7 @@ import {
   updateInfo,
   getUser,
 } from "../controllers/authController.js";
-import { topResults } from "../controllers/searchBox.js";
+import { fetchData } from "../controllers/searchBox.js";
 import { authMiddleware } from "../middlewares/auth.js";
 import { tt } from "../controllers/authController.js";
 
@@ -17,7 +17,8 @@ router.post("/signup", signup);
 //signin route
 router.post("/signin", signin);
 //get questions route
-router.post("/topResults", topResults);
+// router.post("/topResults", topResults);
+router.get("/fetchdata",fetchData);
 
 //test route
 router.post("/test", tt);

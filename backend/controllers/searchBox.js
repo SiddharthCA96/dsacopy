@@ -19,13 +19,13 @@ let all_keyword = [];
 let mag_docs = [];
 let idf_values = [];
 let tf_idf_matrix = [];
-let all_problems_data = []; // Cached all_problem data
+let all_problems_data = [];
 let cached_magDoc = null;
 let cached_idfDoc = null;
 let cached_keywordDoc = null;
 let cached_compressed = null;
 var tot_doc = 2500;
-let isDataLoaded = false; // Flag to check if data is loaded
+let isDataLoaded = false;
 
 const loadData = async () => {
   try {
@@ -48,7 +48,6 @@ const loadData = async () => {
       row.split(",").map((value) => parseFloat(value.trim()) || 0)
     );
 
-    // Load all problems into memory
     all_problems_data = all_problems_data.length ? all_problems_data : await all_problem.find();
 
     isDataLoaded = true;
@@ -66,36 +65,49 @@ const loadData = async () => {
   }
 })();
 
-export const topResults = async (req, res) => {
-  if (!isDataLoaded) {
-    return res.status(500).json({ message: "Data is not loaded." });
-  }
-
-  const query_string = req.body.searchInput.toLowerCase().replace(/(\r\n|\n|\r)/gm, "");
-  const query_keywords = removeStopwords(query_string.split(" ")).sort();
-
-  const mp_query = new Map();
-  query_keywords.forEach((ele) => mp_query.set(ele, (mp_query.get(ele) || 0) + 1));
-
-  const sz_query_keywords = query_keywords.length;
-  const tf_query = all_keyword.map((ele) => (mp_query.get(ele) || 0) / sz_query_keywords);
-
-  const tf_idf_query = tf_query.map((tf, i) => tf * idf_values[i]);
-
-  const mag_query = Math.sqrt(tf_idf_query.reduce((sum, val) => sum + val * val, 0));
-
-  const selectivity_values = new Map();
-  for (let i = 0; i < tot_doc; i++) {
-    let val = tf_idf_query.reduce((sum, q, j) => sum + (tf_idf_matrix[i][j] || 0) * q, 0);
-    if (mag_docs[i] !== 0 && mag_query !== 0) {
-      val /= (mag_docs[i] * mag_query);
-      if (!isNaN(val) && val !== 0) selectivity_values.set(val, i + 1);
-    }
-  }
-
-  const sortedDocs = [...selectivity_values.entries()].sort((a, b) => b[0] - a[0]).slice(0, 5);
-
-  const data = sortedDocs.map(([_, docId]) => all_problems_data.find(p => p.problem_id === docId)).filter(Boolean);
-
-  res.json({ data });
+export const checkDataStatus = (req, res) => {
+  res.json({ isDataLoaded });
 };
+
+export const fetchData = (req, res) => {
+  if (!isDataLoaded) {
+    return res.status(503).json({ message: "Data is still loading. Please try again later." });
+  }
+
+  res.json({
+    all_keyword,
+    mag_docs,
+    idf_values,
+    tf_idf_matrix,
+    all_problems_data
+  });
+};
+
+// export const topResults = async (req, res) => {
+//   const { query_keywords } = req.body;
+
+//   const mp_query = new Map();
+//   query_keywords.forEach((ele) => mp_query.set(ele, (mp_query.get(ele) || 0) + 1));
+
+//   const sz_query_keywords = query_keywords.length;
+//   const tf_query = all_keyword.map((ele) => (mp_query.get(ele) || 0) / sz_query_keywords);
+
+//   const tf_idf_query = tf_query.map((tf, i) => tf * idf_values[i]);
+
+//   const mag_query = Math.sqrt(tf_idf_query.reduce((sum, val) => sum + val * val, 0));
+
+//   const selectivity_values = new Map();
+//   for (let i = 0; i < tot_doc; i++) {
+//     let val = tf_idf_query.reduce((sum, q, j) => sum + (tf_idf_matrix[i][j] || 0) * q, 0);
+//     if (mag_docs[i] !== 0 && mag_query !== 0) {
+//       val /= (mag_docs[i] * mag_query);
+//       if (!isNaN(val) && val !== 0) selectivity_values.set(val, i + 1);
+//     }
+//   }
+
+//   const sortedDocs = [...selectivity_values.entries()].sort((a, b) => b[0] - a[0]).slice(0, 5);
+
+//   const data = sortedDocs.map(([_, docId]) => all_problems_data.find(p => p.problem_id === docId)).filter(Boolean);
+
+//   res.json({ data });
+// };
