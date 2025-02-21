@@ -3,7 +3,7 @@
 //   process.env.NODE_ENV === "production" 
 //     ? "https://sid-ko9b-backend.vercel.app"
 //     : "http://localhost:3000";
-const BASE_URL = "https://sid-ko9b-backend.vercel.app";
+const BASE_URL = "http://localhost:3000";
 console.log("BASE_URL:", BASE_URL);
 
 // Export API endpoint constants

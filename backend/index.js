@@ -8,23 +8,20 @@ const port = process.env.PORT;
 
 const app = express();
 
-// Middleware
-app.use(cors());
+const corsOptions = {
+  origin: ["http://localhost:5173", "https://dsacopy-rnin.vercel.app/"],
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
-// Routes
-// Test Route
-// app.get("/test", (req, res) => {
-//   res.json({
-//     message: "Deployment is successful!",
-//     status: "OK",
-//     timestamp: new Date().toISOString(),
-//   });
-// });
 
+// Routes
 app.use("/api/auth", allRoutes);
 
 // Start the server
 app.listen(port, () => {
-  console.log("Server is running on http://localhost:3000");
+  console.log(`Server is running on http://localhost:${port}`);
 });
