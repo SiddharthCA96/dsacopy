@@ -40,6 +40,8 @@ const Header = ({ setSearchResults, setQueryFlag }) => {
     const { all_keyword, mag_docs, idf_values, tf_idf_matrix, all_problems_data } = cachedData;
     const query_keywords = removeStopwords(searchInput.split(" ")).sort();
 
+    console.log(cachedData);
+    
     // Create query term frequency (TF)
     const mp_query = new Map();
     query_keywords.forEach((word) => mp_query.set(word, (mp_query.get(word) || 0) + 1));
